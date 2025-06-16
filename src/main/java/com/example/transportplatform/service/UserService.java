@@ -1,5 +1,7 @@
 package com.example.transportplatform.service;
 
+import com.example.transportplatform.dto.UserDTO;
+import com.example.transportplatform.mapper.UserMapper;
 import com.example.transportplatform.model.User;
 import com.example.transportplatform.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -7,38 +9,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    private UserMapper userMapper;
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    public UserDTO createUser(UserDTO userDTO) {
+        return userMapper.toDTO(userRepository.save(userMapper.toEntity(userDTO)));
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> userMapper.toDTO(user))
+                .toList();
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public UserDTO getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(user -> userMapper.toDTO(user))
+                .orElseThrow(()->new RuntimeException("user not found"));
     }
 
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
-    public User updateUser(Long id, User updatedUser) {
-        return userRepository.findById(id)
-                .map(existingUser -> {
-                    existingUser.setFirstName(updatedUser.getFirstName());
-                    existingUser.setLastName(updatedUser.getLastName());
-                    existingUser.setEmail(updatedUser.getEmail());
-                    return userRepository.save(existingUser);
-                })
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public UserDTO updateUser(Long id, UserDTO userDTO ) {
+                User user = userRepository.findById(id).get();
+                user.setEmail(userDTO.getEmail());
+                user.setFirstName(userDTO.getFirstName());
+                user.setLastName(userDTO.getLastName());
+                return userMapper.toDTO(userRepository.save(user));
     }
 }

@@ -2,15 +2,12 @@ package com.example.transportplatform.controller;
 
 import com.example.transportplatform.dto.UserDTO;
 import com.example.transportplatform.mapper.UserMapper;
-import com.example.transportplatform.model.User;
 import com.example.transportplatform.service.UserService;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -22,42 +19,34 @@ public class UserController {
 
     @Autowired
     private UserMapper userMapper;
+
+
     // CREATE
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> registerUser(@RequestBody UserDTO dto) {
-        User user = userMapper.toEntity(dto);
-        user.setPassword("123456"); // à remplacer plus tard par BCrypt encoder
-        user.setRole("USER");
-        user.setVerified(false);
-        User saved = userService.saveUser(user);
-        return ResponseEntity.ok(userMapper.toDTO(saved));
+   public ResponseEntity<UserDTO> register(@RequestBody UserDTO userDTO) {
+        UserDTO saved = userService.createUser(userDTO);
+        return ResponseEntity.ok().body(userDTO);
     }
 
     // READ ALL
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<UserDTO> users = userService.getAllUsers()
-                .stream()
-                .map(userMapper::toDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(users);
+        List<UserDTO> users = userService.getAllUsers();
+        return ResponseEntity.ok().body(users);
     }
 
     // READ ONE
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
-        return userService.getUserById(id)
-                .map(userMapper::toDTO)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public UserDTO getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+
     }
 
     // UPDATE
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO dto) {
-        User user = userMapper.toEntity(dto);
-        User updated = userService.updateUser(id, user);
-        return ResponseEntity.ok(userMapper.toDTO(updated));
+      UserDTO updated = userService.updateUser(id, dto);
+      return ResponseEntity.ok().body(updated);
     }
 
     // DELETE
