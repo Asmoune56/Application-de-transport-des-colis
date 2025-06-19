@@ -1,0 +1,25 @@
+<div class="dashboard-container">
+  <h1>Dashboard</h1>
+
+  <div *ngIf="loading">Loading data...</div>
+  <div *ngIf="error">{{ error }}</div>
+
+  <div class="cards" *ngIf="!loading && !error">
+    <div class="card">
+      <h2>Users</h2>
+      <p class="number">{{ stats.usersCount }}</p>
+    </div>
+    <div class="card">
+      <h2>Trips</h2>
+      <p class="number">{{ stats.tripsCount }}</p>
+    </div>
+    <div class="card">
+      <h2>Parcels</h2>
+      <p class="number">{{ stats.parcelsCount }}</p>
+    </div>
+    <div class="card">
+      <h2>Requests</h2>
+      <p class="number">{{ stats.requestsCount }}</p>
+    </div>
+  </div>
+</div>

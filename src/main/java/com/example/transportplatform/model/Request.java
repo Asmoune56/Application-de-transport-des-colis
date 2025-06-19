@@ -15,12 +15,15 @@ public class Request {
     private String status; // PENDING / ACCEPTED / REJECTED
 
     @ManyToOne
+    @JoinColumn(name = "sender_id")
     private User sender;
 
     @ManyToOne
+    @JoinColumn(name = "trip_id")
     private Trip trip;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parcel_id")
     private Parcel parcel;
 
 

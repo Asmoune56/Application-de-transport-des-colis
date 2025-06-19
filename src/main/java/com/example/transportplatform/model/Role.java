@@ -1,6 +1,8 @@
 package com.example.transportplatform.model;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -14,6 +16,9 @@ public class Role {
     @Column(unique = true, nullable = false)
     private RoleName name;
 
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
+    private Set<UserRole> userRoles = new HashSet<>();
+
     public enum RoleName {
         USER, CONDUCTOR, SENDER, ADMIN
     }
@@ -24,4 +29,7 @@ public class Role {
 
     public RoleName getName() { return name; }
     public void setName(RoleName name) { this.name = name; }
+
+    public Set<UserRole> getUserRoles() { return userRoles; }
+    public void setUserRoles(Set<UserRole> userRoles) { this.userRoles = userRoles; }
 }

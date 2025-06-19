@@ -3,8 +3,10 @@ package com.example.transportplatform.service;
 import com.example.transportplatform.dto.UserDTO;
 import com.example.transportplatform.mapper.UserMapper;
 import com.example.transportplatform.model.User;
+import com.example.transportplatform.model.UserRole;
 import com.example.transportplatform.repository.RoleRepository;
 import com.example.transportplatform.repository.UserRepository;
+import com.example.transportplatform.repository.UserRoleRepository;
 import lombok.AllArgsConstructor;
 
 import com.example.transportplatform.model.Role;
@@ -20,26 +22,35 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final RoleRepository roleRepository;
-
+    private final UserRoleRepository userRoleRepository;
+    private final UserMapper userMapper;
 
 
     public UserDTO createUser(UserDTO dto) {
         User user = userMapper.toEntity(dto);
+        user = userRepository.save(user); // نحتاج الـ ID
 
-        if (dto.getRoleIds() != null) {
-            Set<Role> roles = dto.getRoleIds().stream()
-                    .map(roleId -> roleRepository.findById(roleId)
-                            .orElseThrow(() -> new RuntimeException("Role not found: " + roleId)))
-                    .collect(Collectors.toSet());
-            user.setRoles(roles);
-        } else {
-            user.setRoles(new HashSet<>()); // or throw exception if roles are required
+        if (dto.getRoleIds() != null && !dto.getRoleIds().isEmpty()) {
+            Set<UserRole> userRoles = new HashSet<>();
+
+            for (Long roleId : dto.getRoleIds()) {
+                Role role = roleRepository.findById(roleId)
+                        .orElseThrow(() -> new RuntimeException("Role not found: " + roleId));
+
+                UserRole userRole = new UserRole();
+                userRole.setUser(user);
+                userRole.setRole(role);
+
+                userRoles.add(userRole);
+            }
+
+            userRoleRepository.saveAll(userRoles);
         }
 
-        return userMapper.toDTO(userRepository.save(user));
+        return userMapper.toDTO(user);
     }
+
 
 
 

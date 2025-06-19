@@ -1,5 +1,10 @@
 package com.example.transportplatform.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
 public class ParcelDTO {
     private Long id;
     private String description;

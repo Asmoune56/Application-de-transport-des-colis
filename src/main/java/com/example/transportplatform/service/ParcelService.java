@@ -20,6 +20,7 @@ public class ParcelService {
 
     public ParcelDTO createParcel(ParcelDTO dto) {
         return parcelMapper.toDTO(parcelRepository.save(parcelMapper.toEntity(dto)));
+
     }
 
     public List<ParcelDTO> getAllParcels() {
