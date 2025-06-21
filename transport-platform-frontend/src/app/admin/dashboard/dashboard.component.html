@@ -22,4 +22,14 @@
       <p class="number">{{ stats.requestsCount }}</p>
     </div>
   </div>
+
+  <!-- Chart Section -->
+  <div *ngIf="!loading && !error" class="chart-container">
+    <h2>Graphique des statistiques</h2>
+    <canvas baseChart
+            [data]="chartData"
+            [options]="chartOptions"
+            chartType="bar">
+    </canvas>
+  </div>
 </div>

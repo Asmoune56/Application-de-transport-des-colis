@@ -1,0 +1,49 @@
+<div class="container">
+  <h2>Envoyer une demande de transport</h2>
+
+  <!-- ✅ Message de succès -->
+  <div *ngIf="successMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+
+  <!-- ❌ Message d'erreur -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <form (ngSubmit)="onSubmit()" #requestForm="ngForm">
+    <!-- Type de marchandise -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Description du colis</mat-label>
+      <input matInput name="parcelDescription" [(ngModel)]="request.parcel.description" required>
+    </mat-form-field>
+
+    <!-- Poids -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Poids (kg)</mat-label>
+      <input matInput type="number" name="parcelWeight" [(ngModel)]="request.parcel.weight" required>
+    </mat-form-field>
+
+    <!-- Height -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Hauteur (cm)</mat-label>
+      <input matInput type="number" name="parcelHeight" [(ngModel)]="request.parcel.height" required>
+    </mat-form-field>
+
+    <!-- Width -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Largeur (cm)</mat-label>
+      <input matInput type="number" name="parcelWidth" [(ngModel)]="request.parcel.width" required>
+    </mat-form-field>
+
+    <!-- Length -->
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Longueur (cm)</mat-label>
+      <input matInput type="number" name="parcelLength" [(ngModel)]="request.parcel.length" required>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Envoyer la demande</button>
+
+  </form>
+
+</div>

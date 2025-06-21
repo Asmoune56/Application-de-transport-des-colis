@@ -1,23 +1,20 @@
 <nav class="navbar">
   <div class="container">
-    <a href="/" class="logo">TransportPlatform</a>
-    <ul class="nav-links">
-      <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
-      <li><a routerLink="/trips" routerLinkActive="active">Trips</a></li>
-      <li><a routerLink="/profile" routerLinkActive="active">Profile</a></li>
-      <li><a routerLink="/login">Logout</a></li>
+    <a routerLink="/" class="logo">TransportPlatform</a>
+
+    <ul class="nav-links" [class.active]="menuOpen">
+      <li><a routerLink="/dashboard" routerLinkActive="active" (click)="closeMenu()">Dashboard</a></li>
+      <li><a routerLink="/trips" routerLinkActive="active" (click)="closeMenu()">Trips</a></li>
+      <li><a routerLink="/request-history" routerLinkActive="active" (click)="closeMenu()">Request History</a></li>
+
+      <li><a routerLink="/profile" routerLinkActive="active" (click)="closeMenu()">Profile</a></li>
+      <li><a routerLink="/login" (click)="closeMenu()">Logout</a></li>
     </ul>
+
     <div class="hamburger" (click)="toggleMenu()">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
     </div>
   </div>
-
-  <ul class="mobile-menu" [class.open]="menuOpen">
-    <li><a routerLink="/dashboard" routerLinkActive="active" (click)="toggleMenu()">Dashboard</a></li>
-    <li><a routerLink="/trips" routerLinkActive="active" (click)="toggleMenu()">Trips</a></li>
-    <li><a routerLink="/profile" routerLinkActive="active" (click)="toggleMenu()">Profile</a></li>
-    <li><a routerLink="/login" (click)="toggleMenu()">Logout</a></li>
-  </ul>
 </nav>
